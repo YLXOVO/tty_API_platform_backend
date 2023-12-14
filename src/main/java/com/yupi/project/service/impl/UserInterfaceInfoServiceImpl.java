@@ -35,7 +35,18 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
 
 
     }
-
+    @Override
+    public boolean invokeCount(long interfaceInfoId, long uerId) {
+        // 判断
+        if(interfaceInfoId <= 0 || uerId <= 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        UpdateWrapper<UserInterfaceInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("interfaceInfoId",interfaceInfoId);
+        updateWrapper.eq("userId",uerId);
+        updateWrapper.setSql("leftNum = leftNum - 1 , totalNum = totalNum + 1");
+        return this.update(updateWrapper);
+    }
 
 }
 
